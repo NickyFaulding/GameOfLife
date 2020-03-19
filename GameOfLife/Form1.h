@@ -45,6 +45,7 @@ namespace CppCLR_WinformsProjekt {
     private: System::Windows::Forms::Label^  label1;
     private: System::Windows::Forms::Timer^  timer1;
     private:int sec;
+    private: System::Windows::Forms::Button^  button5;
     private: System::ComponentModel::IContainer^  components;
     private:
         /// <summary>
@@ -67,6 +68,7 @@ namespace CppCLR_WinformsProjekt {
             this->button3 = (gcnew System::Windows::Forms::Button());
             this->button4 = (gcnew System::Windows::Forms::Button());
             this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+            this->button5 = (gcnew System::Windows::Forms::Button());
             this->flowLayoutPanel1->SuspendLayout();
             this->SuspendLayout();
             // 
@@ -77,7 +79,6 @@ namespace CppCLR_WinformsProjekt {
             this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
             this->flowLayoutPanel1->Size = System::Drawing::Size(500, 500);
             this->flowLayoutPanel1->TabIndex = 0;
-            this->flowLayoutPanel1->WrapContents = false;
             // 
             // label1
             // 
@@ -123,7 +124,7 @@ namespace CppCLR_WinformsProjekt {
             // 
             // button4
             // 
-            this->button4->Location = System::Drawing::Point(256, 518);
+            this->button4->Location = System::Drawing::Point(438, 518);
             this->button4->Name = L"button4";
             this->button4->Size = System::Drawing::Size(75, 38);
             this->button4->TabIndex = 4;
@@ -136,11 +137,23 @@ namespace CppCLR_WinformsProjekt {
             this->timer1->Interval = 1000;
             this->timer1->Tick += gcnew System::EventHandler(this, &Form1::button4_Click);
             // 
+            // button5
+            // 
+            this->button5->Enabled = false;
+            this->button5->Location = System::Drawing::Point(256, 518);
+            this->button5->Name = L"button5";
+            this->button5->Size = System::Drawing::Size(79, 38);
+            this->button5->TabIndex = 5;
+            this->button5->Text = L"10 row";
+            this->button5->UseVisualStyleBackColor = true;
+            this->button5->Click += gcnew System::EventHandler(this, &Form1::button5_Click);
+            // 
             // Form1
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
             this->ClientSize = System::Drawing::Size(531, 589);
+            this->Controls->Add(this->button5);
             this->Controls->Add(this->button4);
             this->Controls->Add(this->button3);
             this->Controls->Add(this->button2);
@@ -173,13 +186,16 @@ namespace CppCLR_WinformsProjekt {
         }
         this->button2->Enabled = true;
         this->button3->Enabled = true;
+        this->button5->Enabled = true;
 
     }
-             Void buttonArray_Click(System::Object^ sender, System::EventArgs^ e) {
-                 System::Windows::Forms::Button^ buttonArray = gcnew System::Windows::Forms::Button();
-                 buttonArray = safe_cast<Button ^>(sender);
-                 buttonArray->BackColor = System::Drawing::SystemColors::MenuText; //(black)
-             }
+
+    Void buttonArray_Click(System::Object^ sender, System::EventArgs^ e) {
+        System::Windows::Forms::Button^ buttonArray = gcnew System::Windows::Forms::Button();
+        buttonArray = safe_cast<Button ^>(sender);
+        buttonArray->BackColor = System::Drawing::SystemColors::MenuText; //(black)
+    }
+
     private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
     
              for (int i = 0; i < size; i++)
@@ -212,20 +228,38 @@ namespace CppCLR_WinformsProjekt {
             }
         }
     }
-private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
+    private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
     
     
-    flowLayoutPanel1->Controls->Clear();
+        flowLayoutPanel1->Controls->Clear();
        
-    this->label1->Text = "Bye!";
-    flowLayoutPanel1->Controls->Add(label1);
+        this->label1->Text = "Bye!";
+        flowLayoutPanel1->Controls->Add(label1);
 
-    this->timer1->Start();
-    sec++;
+        this->timer1->Start();
+        sec++;
 
-    if (sec == 3) {
-        Application::Exit();
+        if (sec == 3) {
+            Application::Exit();
+        }
     }
-}
+
+    Void tenRow() {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                if ((i == 10) && (j < 15 && j >= 5)) {
+                    this->b[i, j]->BackColor = System::Drawing::SystemColors::MenuText;
+                }
+                else {
+                    this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight;
+                }
+            }
+        }
+    }
+    private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
+        tenRow();
+    }
 };
 }
