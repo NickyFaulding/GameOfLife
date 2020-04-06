@@ -370,6 +370,9 @@ namespace CppCLR_WinformsProjekt {
     }
 
     Void Generation(int i, int j) {
+
+        //check neighbours
+        
         //b[i - 1, j - 1]
         //b[i, j - 1]
         //b[i + 1, j - 1]        
@@ -378,6 +381,25 @@ namespace CppCLR_WinformsProjekt {
         //b[i, j + 1]
         //b[i + 1, j + 1]
         //b[i - 1, j]
+    }
+
+    Void CheckRules(int i, int j, int liveNeighbours) {
+
+        bool isCellAlive;
+        int HowManyNeighbours = liveNeighbours;
+
+        if(isCellAlive == false && HowManyNeighbours == 3) //rule 1
+        {
+            isCellAlive = true;
+        }
+        else if (isCellAlive == true && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2
+        {
+            isCellAlive = false;
+        }
+        else if (isCellAlive == true && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 3
+        {
+            //do nothing cell, cell gets to keep living.
+        }
     }
 
     Void glider() {
