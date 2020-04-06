@@ -1,0 +1,12 @@
+          //small exploder pattern within the grid          
+          
+          button[8,10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+
+					button[9, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+					button[9, 11]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+					button[9, 9]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+
+					button[10, 11]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+					button[10, 9]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+					
+					button[11, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
