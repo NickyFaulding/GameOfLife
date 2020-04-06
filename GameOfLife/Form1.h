@@ -384,7 +384,7 @@ namespace CppCLR_WinformsProjekt {
 
         int HowManyNeighbours;
         bool isAlive;
-        bool isEdge;
+        bool isEdge = false;
 
         if (i == 0 || i == 19) {
             isEdge = true;
@@ -409,37 +409,37 @@ namespace CppCLR_WinformsProjekt {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+            if (b[i, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i + 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+             if (b[i + 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i - 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+             if (b[i - 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i + 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+             if (b[i + 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+             if (b[i, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i + 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+             if (b[i + 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
 
-            else if (b[i - 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+             if (b[i - 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
             {
                 HowManyNeighbours = HowManyNeighbours + 1;
             }
@@ -449,9 +449,10 @@ namespace CppCLR_WinformsProjekt {
         }
     }
 
-    Void CheckRules(int i, int j, int HowManyNeighbours, bool isAlive) {
+    Void CheckRules(int i, int j, int howManyNeighbours, bool isAlive) {
 
         bool isCellAlive = isAlive;
+        int HowManyNeighbours = howManyNeighbours;
 
         if(isCellAlive == false && HowManyNeighbours == 3) //rule 1
         {
