@@ -7,11 +7,8 @@ namespace CppCLR_WinformsProjekt {
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
-	using namespace System::Drawing;
+    using namespace System::Drawing;
 
-	/// <summary>
-	/// Zusammenfassung für Form1
-	/// </summary>
     public ref class Form1 : public System::Windows::Forms::Form
     {
     public:
@@ -41,13 +38,15 @@ namespace CppCLR_WinformsProjekt {
     private: System::Windows::Forms::Button^  button3;
     private: System::Windows::Forms::Button^  button4;
     private: array<Button^, 2>^ b;
+    private: array<int^, 2>^ cells;
+    //private: array<       MyClass^ mc = gcnew MyClass()
     private: const int size = 20;
     private: System::Windows::Forms::Label^  label1;
     private: System::Windows::Forms::Timer^  timer1;
     private:int sec;
     private: System::Windows::Forms::Button^  button5;
     private: System::Windows::Forms::Button^  btnGlider;
-
+    
     private: System::Windows::Forms::NumericUpDown^  numericUpDown1;
     private: System::Windows::Forms::Label^  label2;
     private: System::Windows::Forms::Button^  btnMove;
@@ -176,6 +175,7 @@ namespace CppCLR_WinformsProjekt {
             this->btnGlider->TabIndex = 6;
             this->btnGlider->Text = L"Glider";
             this->btnGlider->UseVisualStyleBackColor = true;
+            this->btnGlider->Click += gcnew System::EventHandler(this, &Form1::btnGlider_Click);
             // 
             // numericUpDown1
             // 
@@ -276,7 +276,8 @@ namespace CppCLR_WinformsProjekt {
 #pragma endregion
     private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
         flowLayoutPanel1->Controls->Clear();
-        this->b = gcnew cli::array<Button^, 2>(size, size);
+        this->b = gcnew cli::array<Button^, 2>(size, size); //creating array of buttons
+        this->cells = gcnew cli::array<int^, 2>(size, size); //creating array of cells
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++)
@@ -287,6 +288,7 @@ namespace CppCLR_WinformsProjekt {
                 bttnsArray->Height = 25;
                 bttnsArray->Margin = System::Windows::Forms::Padding(0);
                 b[i, j] = bttnsArray;
+                cells[i, j] = 0; //set cell state to dead
                 flowLayoutPanel1->Controls->Add(bttnsArray);
                 this->b[i, j]->Click += gcnew System::EventHandler(this, &Form1::buttonArray_Click);
             }
@@ -294,6 +296,7 @@ namespace CppCLR_WinformsProjekt {
         this->button2->Enabled = true;
         this->button3->Enabled = true;
         this->button5->Enabled = true;
+        this->btnGlider->Enabled = true;
 
     }
 
@@ -301,6 +304,8 @@ namespace CppCLR_WinformsProjekt {
         System::Windows::Forms::Button^ buttonArray = gcnew System::Windows::Forms::Button();
         buttonArray = safe_cast<Button ^>(sender);
         buttonArray->BackColor = System::Drawing::SystemColors::MenuText; //(black)
+
+
     }
 
     private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -351,6 +356,45 @@ namespace CppCLR_WinformsProjekt {
         }
     }
 
+    Void CheckCells() {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) 
+                {
+                    Generation(i, j);
+                }
+            }
+        }
+    }
+
+    Void Generation(int i, int j) {
+        //b[i - 1, j - 1]
+        //b[i, j - 1]
+        //b[i + 1, j - 1]        
+        //b[i - 1, j + 1]
+        //b[i + 1, j]
+        //b[i, j + 1]
+        //b[i + 1, j + 1]
+        //b[i - 1, j]
+    }
+
+    Void glider() {
+        //small exploder pattern within the grid          
+
+        b[8, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+
+        b[9, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+        b[9, 11]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+        b[9, 9]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+
+        b[10, 11]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+        b[10, 9]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+
+        b[11, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+    }
+
     Void tenRow() {
         for (int i = 0; i < size; i++)
         {
@@ -358,6 +402,7 @@ namespace CppCLR_WinformsProjekt {
             {
                 if ((i == 10) && (j < 15 && j >= 5)) {
                     this->b[i, j]->BackColor = System::Drawing::SystemColors::MenuText;
+                    this->cells[i, j] = 1;
                 }
                 else {
                     this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight;
@@ -368,5 +413,10 @@ namespace CppCLR_WinformsProjekt {
     private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
         tenRow();
     }
+    private: System::Void btnGlider_Click(System::Object^  sender, System::EventArgs^  e) {
+        glider();
+    }
 };
+
+
 }
