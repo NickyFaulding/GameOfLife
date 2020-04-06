@@ -10,3 +10,56 @@
 					button[10, 9]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
 					
 					button[11, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+					
+					
+	 // checking to see if neighbour cells are alive
+	 
+	 
+  for (int i = 0 ; i< size; i++)
+  {
+    for(int j = 0; j < size; j++)
+    {
+      if (b[i,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+      {
+       if (b[i-1,j-1]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+
+       else if (b[i,j-1]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+        
+        else if (b[i+1,j-1]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+
+        else if (b[i-1,j+1]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        { 
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+
+        else if (b[i+1,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+
+        else if (b[i,j+1]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+
+        else if (b[i+1,j+1]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+
+        else if (b[i-1,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark)
+        {
+          HowManyNeighbours = HowManyNeighBours + 1;
+        }
+      }
+    }
+  }
