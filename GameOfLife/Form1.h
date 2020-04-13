@@ -2,11 +2,11 @@
 
 namespace CppCLR_WinformsProjekt {
 
-	using namespace System;
-	using namespace System::ComponentModel;
-	using namespace System::Collections;
-	using namespace System::Windows::Forms;
-	using namespace System::Data;
+    using namespace System;
+    using namespace System::ComponentModel;
+    using namespace System::Collections;
+    using namespace System::Windows::Forms;
+    using namespace System::Data;
     using namespace System::Drawing;
 
     public ref class Form1 : public System::Windows::Forms::Form
@@ -34,19 +34,19 @@ namespace CppCLR_WinformsProjekt {
     private: System::Windows::Forms::FlowLayoutPanel^  flowLayoutPanel1;
     protected:
     private: System::Windows::Forms::Button^  button1;
-    private: System::Windows::Forms::Button^  button2;
-    private: System::Windows::Forms::Button^  button3;
+
+
     private: System::Windows::Forms::Button^  button4;
     private: array<Button^, 2>^ b;
     private: array<int^, 2>^ cells;
-    //private: array<       MyClass^ mc = gcnew MyClass()
+             //private: array<       MyClass^ mc = gcnew MyClass()
     private: const int size = 20;
     private: System::Windows::Forms::Label^  label1;
     private: System::Windows::Forms::Timer^  timer1;
     private:int sec;
     private: System::Windows::Forms::Button^  button5;
     private: System::Windows::Forms::Button^  btnGlider;
-    
+
     private: System::Windows::Forms::NumericUpDown^  numericUpDown1;
     private: System::Windows::Forms::Label^  label2;
     private: System::Windows::Forms::Button^  btnMove;
@@ -72,8 +72,6 @@ namespace CppCLR_WinformsProjekt {
             this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
             this->label1 = (gcnew System::Windows::Forms::Label());
             this->button1 = (gcnew System::Windows::Forms::Button());
-            this->button2 = (gcnew System::Windows::Forms::Button());
-            this->button3 = (gcnew System::Windows::Forms::Button());
             this->button4 = (gcnew System::Windows::Forms::Button());
             this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
             this->button5 = (gcnew System::Windows::Forms::Button());
@@ -117,28 +115,6 @@ namespace CppCLR_WinformsProjekt {
             this->button1->Text = L"Load Board";
             this->button1->UseVisualStyleBackColor = true;
             this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
-            // 
-            // button2
-            // 
-            this->button2->Enabled = false;
-            this->button2->Location = System::Drawing::Point(94, 518);
-            this->button2->Name = L"button2";
-            this->button2->Size = System::Drawing::Size(75, 38);
-            this->button2->TabIndex = 2;
-            this->button2->Text = L"Fill with Number";
-            this->button2->UseVisualStyleBackColor = true;
-            this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
-            // 
-            // button3
-            // 
-            this->button3->Enabled = false;
-            this->button3->Location = System::Drawing::Point(94, 562);
-            this->button3->Name = L"button3";
-            this->button3->Size = System::Drawing::Size(75, 38);
-            this->button3->TabIndex = 3;
-            this->button3->Text = L"Fill Board (even)";
-            this->button3->UseVisualStyleBackColor = true;
-            this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
             // 
             // button4
             // 
@@ -259,8 +235,6 @@ namespace CppCLR_WinformsProjekt {
             this->Controls->Add(this->btnGlider);
             this->Controls->Add(this->button5);
             this->Controls->Add(this->button4);
-            this->Controls->Add(this->button3);
-            this->Controls->Add(this->button2);
             this->Controls->Add(this->button1);
             this->Controls->Add(this->flowLayoutPanel1);
             this->Name = L"Form1";
@@ -294,8 +268,6 @@ namespace CppCLR_WinformsProjekt {
                 this->b[i, j]->Click += gcnew System::EventHandler(this, &Form1::buttonArray_Click);
             }
         }
-        this->button2->Enabled = true;
-        this->button3->Enabled = true;
         this->button5->Enabled = true;
         this->btnGlider->Enabled = true;
         this->btnMove->Enabled = true;
@@ -310,43 +282,11 @@ namespace CppCLR_WinformsProjekt {
 
     }
 
-    private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
-    
-             for (int i = 0; i < size; i++)
-             {
-                 for (int j = 0; j < size; j++)
-                 {
-                     if ((i + j) % 2 == 0) {
-                         this->b[i, j]->Text = System::Convert::ToString("@");
-
-                     }
-                     else {
-                         this->b[i, j]->Text = System::Convert::ToString("8");
-                     }
-                 }
-             }
-    }
-
-    private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                if ((i + j) % 2 == 0) {
-                    this->b[i, j]->BackColor = System::Drawing::SystemColors::MenuText;
-                }
-                else {
-                    //this->Text = System::Convert::ToString("");
-                    this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight;
-                }
-            }
-        }
-    }
     private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
-    
-    
+
+
         flowLayoutPanel1->Controls->Clear();
-       
+
         this->label1->Text = "Bye!";
         flowLayoutPanel1->Controls->Add(label1);
 
@@ -362,17 +302,16 @@ namespace CppCLR_WinformsProjekt {
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
-            {                
-                 Generation(i, j);                
+            {
+                Generation(i, j);
             }
         }
     }
 
-    Void Generation(int i, int j) 
+    Void Generation(int i, int j)
     {
-
         //check neighbours
-        
+
         //b[i - 1, j - 1]
         //b[i, j - 1]
         //b[i + 1, j - 1]        
@@ -386,68 +325,77 @@ namespace CppCLR_WinformsProjekt {
         bool isAlive;
         bool isEdge = false;
 
-        if (i == 0 || i == 19) {
-            isEdge = true;
-        }
-
-        if (j == 0 || j == 19) {
+        if (i == 0 || i == size - 1 || j == 0 || j == size - 1) {
             isEdge = true;
         }
 
         isAlive = false;
         HowManyNeighbours = 0;
 
-        if (!isEdge) {
-
-            if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                isAlive = true;
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                if (b[(x + i + size) % size, (y + j + size) % size]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
+                    HowManyNeighbours++;
+                }
             }
-
-            if (b[i - 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-            if (b[i, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-             if (b[i + 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-             if (b[i - 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-             if (b[i + 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-             if (b[i, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-             if (b[i + 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-             if (b[i - 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-            {
-                HowManyNeighbours = HowManyNeighbours + 1;
-            }
-
-
-            CheckRules(i, j, HowManyNeighbours, isAlive);
         }
+
+        if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
+            HowManyNeighbours -= 1;
+        }
+
+
+        //if (!isEdge) {
+
+        //    if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        isAlive = true;
+        //    }
+
+        //    if (b[i - 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //    if (b[i, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //     if (b[i + 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //     if (b[i - 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //     if (b[i + 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //     if (b[i, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //     if (b[i + 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+        //     if (b[i - 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
+        //    {
+        //        HowManyNeighbours = HowManyNeighbours + 1;
+        //    }
+
+
+        CheckRules(i, j, HowManyNeighbours, isAlive);
     }
+    
 
     Void CheckRules(int i, int j, int howManyNeighbours, bool isAlive) {
 
@@ -458,12 +406,12 @@ namespace CppCLR_WinformsProjekt {
         {
             isCellAlive = true;
         }
-        else if (isCellAlive == true && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2
+        else if (isCellAlive == true && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2 and rule 3
         {
             isCellAlive = false;
 
         }
-        else if (isCellAlive == true && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 3
+        else if (isCellAlive == true && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 4
         {
             //do nothing cell, cell gets to keep living.
         }
