@@ -263,7 +263,6 @@ namespace CppCLR_WinformsProjekt {
                 bttnsArray->Height = 25;
                 bttnsArray->Margin = System::Windows::Forms::Padding(0);
                 b[i, j] = bttnsArray;
-                cells[i, j] = 0; //set cell state to dead
                 flowLayoutPanel1->Controls->Add(bttnsArray);
                 this->b[i, j]->Click += gcnew System::EventHandler(this, &Form1::buttonArray_Click);
             }
@@ -298,134 +297,90 @@ namespace CppCLR_WinformsProjekt {
         }
     }
 
+    Void CopyOldGrid() { //makes a copy of the current grid and stores the cells as 1 or 0 depending on if they are alive or not
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+
+                if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
+                    cells[i, j] = 1;
+                }
+                else {
+                    cells[i, j] = 0;
+                }
+            }
+        }
+    }
+
     Void CheckCells() {
+
+        CopyOldGrid();
+
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
-                Generation(i, j);
-            }
-        }
-    }
+                int HowManyNeighbours = 0;
 
-    Void Generation(int i, int j)
-    {
-        //check neighbours
+                if (i == 0 || i == size - 1 || j == 0 || j == size - 1) {
+                    //
+                }
 
-        //b[i - 1, j - 1]
-        //b[i, j - 1]
-        //b[i + 1, j - 1]        
-        //b[i - 1, j + 1]
-        //b[i + 1, j]
-        //b[i, j + 1]
-        //b[i + 1, j + 1]
-        //b[i - 1, j]
+                else {
 
-        int HowManyNeighbours;
-        bool isAlive;
-        bool isEdge = false;
-
-        if (i == 0 || i == size - 1 || j == 0 || j == size - 1) {
-            isEdge = true;
-        }
-
-        isAlive = false;
-        HowManyNeighbours = 0;
-
-        for (int x = -1; x < 2; x++) {
-            for (int y = -1; y < 2; y++) {
-                if (b[(x + i + size) % size, (y + j + size) % size]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
-                    HowManyNeighbours++;
+                    HowManyNeighbours = CheckNeighbours(i, j);
+                    CheckRules(i, j, HowManyNeighbours);
+                    //SetCellColours(i, j);
                 }
             }
         }
 
-        if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
-            HowManyNeighbours -= 1;
+    }
+
+    int CheckNeighbours(int i, int j)
+    {
+        int count = 0;
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                if (cells[(x + i + size) % size, (y + j + size) % size] == 1)
+                {
+                    count++;
+                }
+            }
         }
 
+        if (cells[i, j] == 1) //remove the current cell from the count if it's active
+        {
+            count -= 1;
+        }
 
-        //if (!isEdge) {
-
-        //    if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        isAlive = true;
-        //    }
-
-        //    if (b[i - 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //    if (b[i, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //     if (b[i + 1, j - 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //     if (b[i - 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //     if (b[i + 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //     if (b[i, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //     if (b[i + 1, j + 1]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-        //     if (b[i - 1, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark)
-        //    {
-        //        HowManyNeighbours = HowManyNeighbours + 1;
-        //    }
-
-
-        CheckRules(i, j, HowManyNeighbours, isAlive);
+        return count;
     }
-    
 
-    Void CheckRules(int i, int j, int howManyNeighbours, bool isAlive) {
+    Void CheckRules(int i, int j, int howManyNeighbours) {
 
-        bool isCellAlive = isAlive;
         int HowManyNeighbours = howManyNeighbours;
 
-        if(isCellAlive == false && HowManyNeighbours == 3) //rule 1
+        if(cells[i,j] == 0 && HowManyNeighbours == 3) //rule 1 : reproduction
         {
-            isCellAlive = true;
+            b[i,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark; //cell live
         }
-        else if (isCellAlive == true && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2 and rule 3
+        else if (cells[i,j] == 1 && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2 and rule 3 : underpopulation & overcrowding
         {
-            isCellAlive = false;
+            b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight; //cell dead
 
         }
-        else if (isCellAlive == true && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 4
+        else if (cells[i,j] == 1 && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 4 : healthy cell
         {
             //do nothing cell, cell gets to keep living.
         }
-
-        SetCellColours(i, j, isCellAlive);
     }
 
-    Void SetCellColours(int i, int j, bool isCellAlive) {
-        if (isCellAlive == true) {
-            b[i, j]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+    Void SetCellColours(int i, int j) {
+        if (cells[i, j] == 1) {
+            b[i,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
         }
         else {
             b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight;
-
         }
     }
 
@@ -450,7 +405,7 @@ namespace CppCLR_WinformsProjekt {
             for (int j = 0; j < size; j++)
             {
                 if ((i == 10) && (j < 15 && j >= 5)) {
-                    this->b[i, j]->BackColor = System::Drawing::SystemColors::MenuText;
+                    this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
                     this->cells[i, j] = 1;
                 }
                 else {
