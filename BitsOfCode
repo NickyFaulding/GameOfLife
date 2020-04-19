@@ -63,3 +63,59 @@
       }
     }
   }
+  
+  
+  //attempt at timer loop for the start/continue button
+  if (System::Convert::ToInt16(numericUpDown1->Text) == 0)
+        {
+            for (sec = 0; sec < 100000; sec++)
+            {
+                timer2->Start();
+                
+
+                for (int i = 0; i < 6; ++i)
+                {
+                    sec++;
+
+                    int limit = 6;
+
+                    while (sec == 5)
+                    {
+                        CheckCells();
+                        sec = 0;
+                    }
+
+                    if (sec == limit)
+                    {
+                        sec = 0;
+                        timer2->Stop();
+
+                    }
+
+
+                }
+            }
+        }
+	
+	//attempt at text file within the close button
+	
+	
+void WriteToText() {
+
+        ofstream record;
+
+        record.open("Record.csv", ios::out);
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                record << (i, j);
+            }
+        }
+
+        record.close();
+        
+    }
+  
+  
