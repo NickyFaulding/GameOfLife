@@ -38,9 +38,11 @@ namespace CppCLR_WinformsProjekt {
 
     private: System::Windows::Forms::Button^  button4;
     private: array<Button^, 2>^ b;
-    private: array<int^, 2>^ cells;
-             //private: array<       MyClass^ mc = gcnew MyClass()
+    private: array<int^, 2>^ oldCells;
+    private: array<int^, 2>^ newCells;
     private: const int size = 20;
+    private: int itterations;
+             //private: array<       MyClass^ mc = gcnew MyClass()
     private: System::Windows::Forms::Label^  label1;
     private: System::Windows::Forms::Timer^  timer1;
     private:int sec;
@@ -249,10 +251,13 @@ namespace CppCLR_WinformsProjekt {
 
         }
 #pragma endregion
+
     private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
         flowLayoutPanel1->Controls->Clear();
         this->b = gcnew cli::array<Button^, 2>(size, size); //creating array of buttons
-        this->cells = gcnew cli::array<int^, 2>(size, size); //creating array of cells
+        this->oldCells = gcnew cli::array<int^, 2>(size, size); //creating array to contain the current state of the cells
+        this->newCells = gcnew cli::array<int^, 2>(size, size); //creating array to contain the new state of the cells
+        this->itterations = 0; // initialise the itteration count when we reset the board.
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++)
@@ -297,20 +302,6 @@ namespace CppCLR_WinformsProjekt {
         }
     }
 
-    Void CopyOldGrid() { //makes a copy of the current grid and stores the cells as 1 or 0 depending on if they are alive or not
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-
-                if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
-                    cells[i, j] = 1;
-                }
-                else {
-                    cells[i, j] = 0;
-                }
-            }
-        }
-    }
-
     Void CheckCells() {
 
         CopyOldGrid();
@@ -321,34 +312,44 @@ namespace CppCLR_WinformsProjekt {
             {
                 int HowManyNeighbours = 0;
 
-                if (i == 0 || i == size - 1 || j == 0 || j == size - 1) {
-                    //
-                }
-
-                else {
-
-                    HowManyNeighbours = CheckNeighbours(i, j);
-                    CheckRules(i, j, HowManyNeighbours);
-                    //SetCellColours(i, j);
-                }
+                HowManyNeighbours = CheckNeighbours(i, j);
+                CheckRules(i, j, HowManyNeighbours);
             }
         }
 
+        DisplayNewGrid();
+    }
+
+    Void CopyOldGrid() { //makes a copy of the current grid and stores the cells as 1 or 0 depending on if they are alive or not
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+
+                if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
+                    oldCells[i, j] = 1;
+                }
+                else {
+                    oldCells[i, j] = 0;
+                }
+
+                newCells[i, j] = 0;
+            }
+        }
     }
 
     int CheckNeighbours(int i, int j)
     {
         int count = 0;
+
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
-                if (cells[(x + i + size) % size, (y + j + size) % size] == 1)
+                if (b[(x + i + size) % size, (y + j + size) % size]->BackColor == System::Drawing::SystemColors::ControlDarkDark)  //wrap around edges  (0 - 1 + 20) % 20 = 19
                 {
                     count++;
                 }
             }
         }
 
-        if (cells[i, j] == 1) //remove the current cell from the count if it's active
+        if (b[i, j]->BackColor == System::Drawing::SystemColors::ControlDarkDark) //remove the current cell from the count if it's alive
         {
             count -= 1;
         }
@@ -360,23 +361,25 @@ namespace CppCLR_WinformsProjekt {
 
         int HowManyNeighbours = howManyNeighbours;
 
-        if(cells[i,j] == 0 && HowManyNeighbours == 3) //rule 1 : reproduction
+        if((int)oldCells[i,j] == 0 && HowManyNeighbours == 3) //rule 1 : reproduction
         {
-            b[i,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark; //cell live
+            newCells[i, j] = 1;//cell live
         }
-        else if (cells[i,j] == 1 && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2 and rule 3 : underpopulation & overcrowding
+        else if ((int)oldCells[i,j] == 1 && (HowManyNeighbours < 2 || HowManyNeighbours > 3)) //rule 2 and rule 3 : underpopulation & overcrowding
         {
-            b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight; //cell dead
+            newCells[i, j] = 0;//cell dead
 
         }
-        else if (cells[i,j] == 1 && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 4 : healthy cell
+        else if ((int)oldCells[i,j] == 1 && (HowManyNeighbours == 2 || HowManyNeighbours == 3)) //rule 4 : healthy cell
         {
+            newCells[i, j] = oldCells[i, j];
             //do nothing cell, cell gets to keep living.
         }
     }
 
-    Void SetCellColours(int i, int j) {
-        if (cells[i, j] == 1) {
+    Void ApplyNewGrid(int i, int j) {
+
+        if ((int)newCells[i, j] == 1) {
             b[i,j]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
         }
         else {
@@ -384,8 +387,27 @@ namespace CppCLR_WinformsProjekt {
         }
     }
 
-    Void glider() {
-        //small exploder pattern within the grid          
+    Void DisplayNewGrid() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                ApplyNewGrid(i, j);
+            }
+        }
+    }
+
+    Void ClearGrid() {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight;
+
+            }
+        }
+    }
+
+    Void Glider() {
+        //small exploder pattern within the grid
 
         b[8, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
 
@@ -399,14 +421,13 @@ namespace CppCLR_WinformsProjekt {
         b[11, 10]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
     }
 
-    Void tenRow() {
+    Void TenRow() {
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
                 if ((i == 10) && (j < 15 && j >= 5)) {
                     this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlDarkDark;
-                    this->cells[i, j] = 1;
                 }
                 else {
                     this->b[i, j]->BackColor = System::Drawing::SystemColors::ControlLight;
@@ -415,16 +436,18 @@ namespace CppCLR_WinformsProjekt {
         }
     }
     private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
-        tenRow();
+        ClearGrid();
+        TenRow();
     }
     private: System::Void btnGlider_Click(System::Object^  sender, System::EventArgs^  e) {
-        glider();
+        ClearGrid();
+        Glider();
     }
 
     private: System::Void btnMove_Click(System::Object^  sender, System::EventArgs^  e) {
         CheckCells();
+        itterations++;
+        lblIterations->Text = itterations.ToString();
     }
 };
-
-
 }
