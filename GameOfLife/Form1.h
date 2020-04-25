@@ -15,15 +15,9 @@ namespace CppCLR_WinformsProjekt {
         Form1(void)
         {
             InitializeComponent();
-            //
-            //TODO: Konstruktorcode hier hinzufügen.
-            //
         }
 
     protected:
-        /// <summary>
-        /// Verwendete Ressourcen bereinigen.
-        /// </summary>
         ~Form1()
         {
             if (components)
@@ -31,11 +25,10 @@ namespace CppCLR_WinformsProjekt {
                 delete components;
             }
         }
+
     private: System::Windows::Forms::FlowLayoutPanel^  flowLayoutPanel1;
     protected:
     private: System::Windows::Forms::Button^  button1;
-
-
     private: System::Windows::Forms::Button^  button4;
     private: array<Button^, 2>^ b;
     private: array<int^, 2>^ oldCells;
@@ -45,7 +38,8 @@ namespace CppCLR_WinformsProjekt {
     private: int speed = 1;
     private: System::Windows::Forms::Label^  label1;
     private: System::Windows::Forms::Timer^  timer1;
-    private:int sec;
+    private: System::Windows::Forms::Timer^  timer2;
+    private:int sec = 0;
     private: System::Windows::Forms::Button^  button5;
     private: System::Windows::Forms::Button^  btnGlider;
 
@@ -60,16 +54,10 @@ namespace CppCLR_WinformsProjekt {
     private: System::Windows::Forms::Button^  btnTumbler;
     private: System::ComponentModel::IContainer^  components;
     private:
-        /// <summary>
-        /// Erforderliche Designervariable.
-        /// </summary>
 
 
 #pragma region Windows Form Designer generated code
-        /// <summary>
-        /// Erforderliche Methode für die Designerunterstützung.
-        /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
-        /// </summary>
+
         void InitializeComponent(void)
         {
             this->components = (gcnew System::ComponentModel::Container());
@@ -89,6 +77,7 @@ namespace CppCLR_WinformsProjekt {
             this->lblIterations = (gcnew System::Windows::Forms::Label());
             this->btnRandGrid = (gcnew System::Windows::Forms::Button());
             this->btnTumbler = (gcnew System::Windows::Forms::Button());
+            this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
             this->flowLayoutPanel1->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
             this->groupBox1->SuspendLayout();
@@ -252,6 +241,10 @@ namespace CppCLR_WinformsProjekt {
             this->btnTumbler->UseVisualStyleBackColor = true;
             this->btnTumbler->Click += gcnew System::EventHandler(this, &Form1::btnTumbler_Click);
             // 
+            // timer2
+            // 
+            this->timer2->Interval = 1000;
+            // 
             // Form1
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -300,6 +293,8 @@ namespace CppCLR_WinformsProjekt {
                 bttnsArray->Width = 25;
                 bttnsArray->Height = 25;
                 bttnsArray->Margin = System::Windows::Forms::Padding(0);
+                bttnsArray->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+                bttnsArray->FlatAppearance->BorderSize = 0.5;
                 b[i, j] = bttnsArray;
                 flowLayoutPanel1->Controls->Add(bttnsArray);
                 this->b[i, j]->Click += gcnew System::EventHandler(this, &Form1::buttonArray_Click);
@@ -317,12 +312,15 @@ namespace CppCLR_WinformsProjekt {
 
     }
 
-    Void buttonArray_Click(System::Object^ sender, System::EventArgs^ e) {
+    Void buttonArray_Click(System::Object^ sender, System::EventArgs^ e) {  //button clicker
         System::Windows::Forms::Button^ buttonArray = gcnew System::Windows::Forms::Button();
         buttonArray = safe_cast<Button ^>(sender);
-        buttonArray->BackColor = System::Drawing::SystemColors::ControlDarkDark; //(black)
-
-
+        if (buttonArray->BackColor == System::Drawing::SystemColors::ControlDarkDark) {
+            buttonArray->BackColor = System::Drawing::SystemColors::ControlLight; //white
+        }
+        else {
+            buttonArray->BackColor = System::Drawing::SystemColors::ControlDarkDark; //(black)
+        }
     }
 
     private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -331,9 +329,10 @@ namespace CppCLR_WinformsProjekt {
         flowLayoutPanel1->Controls->Clear();
 
         this->label1->Text = "Bye!";
-        flowLayoutPanel1->Controls->Add(label1);
+        flowLayoutPanel1->Controls->Add(label1);        
 
-        this->timer1->Start();
+        this->timer2->Start();
+
         sec++;
 
         if (sec == 3) {
@@ -511,6 +510,7 @@ namespace CppCLR_WinformsProjekt {
         ClearGrid();
         TenRow();
     }
+
     private: System::Void btnGlider_Click(System::Object^  sender, System::EventArgs^  e) {
         ClearGrid();
         Glider();
@@ -539,6 +539,7 @@ namespace CppCLR_WinformsProjekt {
         timer1->Enabled = false;
         
     }
+
     private: System::Void btnRandGrid_Click(System::Object^  sender, System::EventArgs^  e) { //fills all spaces randomly
 
         int randomNum;
@@ -560,6 +561,7 @@ namespace CppCLR_WinformsProjekt {
         }
 
     }
+
     private: System::Void btnTumbler_Click(System::Object^  sender, System::EventArgs^  e) {
         ClearGrid();
         Tumbler();
